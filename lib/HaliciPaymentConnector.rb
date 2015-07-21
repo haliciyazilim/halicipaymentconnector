@@ -6,8 +6,15 @@ class HaliciPaymentConnector
 
   def checkout(params)
     params[:token] = token
-    RestClient.post(host, params) do |response, request, result|
+    RestClient.post("#{host}/payments/checkout", params) do |response, request, result|
       return JSON.parse(result.body)['payment_url']
+    end
+  end
+
+
+  def check(payment_id)
+    RestClient.post("#{host}/payments/check", {payment_id:payment_id,token:token}) do |response, request, result|
+      return JSON.parse(result.body)['payment']
     end
   end
 
